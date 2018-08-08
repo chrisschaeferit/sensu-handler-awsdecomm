@@ -43,52 +43,52 @@ class AwsDecomm < Sensu::Handler
       end
     end
 
-    def delete_chef_node
-      Spice.setup do |s|
-        s.server_url   = "http://#{settings["awsdecomm"]["chef_server_host"]}:#{settings["awsdecomm"]["chef_server_port"]}"
-        s.client_name  = settings["awsdecomm"]["chef_client_user"]
-        s.client_key   = Spice.read_key_file( settings["awsdecomm"]["chef_client_key_dir"] )
-        s.chef_version = settings["awsdecomm"]["chef_server_version"]
-      end
+#    def delete_chef_node
+#      Spice.setup do |s|
+#        s.server_url   = "http://#{settings["awsdecomm"]["chef_server_host"]}:#{settings["awsdecomm"]["chef_server_port"]}"
+#        s.client_name  = settings["awsdecomm"]["chef_client_user"]
+#        s.client_key   = Spice.read_key_file( settings["awsdecomm"]["chef_client_key_dir"] )
+#        s.chef_version = settings["awsdecomm"]["chef_server_version"]
+#      end
+#
+#      JSON.create_id = nil #this is needed because the json response has a json_class key
+#      retries = 1
+#      begin
+#        puts "Chef node #{@event['client']['name']} is being deleted"
+#        Spice.delete( "/nodes/#{@event['client']['name']}" )
+#      rescue StandardError, Spice::Error => e
+#        if (retries -= 1) >= 0
+#          sleep 3
+#          puts e.message + " Deletion failed; retrying to delete chef node #{@event['client']['name']}"
+#          retry
+#        else
+#          puts @b << e.message + " Deleting chef node #{@event['client']['name']} failed permanently."
+#          @s = "failed"
+#        end 
+#        end
 
-      JSON.create_id = nil #this is needed because the json response has a json_class key
-      retries = 1
-      begin
-        puts "Chef node #{@event['client']['name']} is being deleted"
-        Spice.delete( "/nodes/#{@event['client']['name']}" )
-      rescue StandardError, Spice::Error => e
-        if (retries -= 1) >= 0
-          sleep 3
-          puts e.message + " Deletion failed; retrying to delete chef node #{@event['client']['name']}"
-          retry
-        else
-          puts @b << e.message + " Deleting chef node #{@event['client']['name']} failed permanently."
-          @s = "failed"
-        end 
-      end
-
-      retries = 1
-      begin
-        puts "Chef client #{@event['client']['name']} is being deleted"
-        Spice.delete( "/clients/#{@event['client']['name']}" )
-      rescue StandardError, Spice::Error => e
-        if (retries -= 1) >= 0
-          sleep 3
-          puts e.message + " Deletion failed, retrying to delete chef client #{@event['client']['name']}"
-          retry
-        else
-          puts @b << e.message + " Deleting chef client #{@event['client']['name']} failed permanently."
-          @s = "failed"
-        end 
-      end
-    end
+#      retries = 1
+#      begin
+#        puts "Chef client #{@event['client']['name']} is being deleted"
+#        Spice.delete( "/clients/#{@event['client']['name']}" )
+#      rescue StandardError, Spice::Error => e
+#        if (retries -= 1) >= 0
+#          sleep 3
+#          puts e.message + " Deletion failed, retrying to delete chef client #{@event['client']['name']}"
+#          retry
+#        else
+#          puts @b << e.message + " Deleting chef client #{@event['client']['name']} failed permanently."
+#          @s = "failed"
+#        end 
+#      end
+#   end
 
   def check_ec2
     instance = false
     %w{ ec2.us-east-1.amazonaws.com ec2.us-west-2.amazonaws.com }.each do |region|
       ec2 = AWS::EC2.new(
-        :access_key_id => settings["awsdecomm"]["access_key_id"],
-        :secret_access_key => settings["awsdecomm"]["secret_access_key"],
+#        :access_key_id => settings["awsdecomm"]["access_key_id"],
+#        :secret_access_key => settings["awsdecomm"]["secret_access_key"],
         :ec2_endpoint => region
       )
 
